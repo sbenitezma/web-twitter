@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap');
+
+// All variable changes need to happen before @import
+$body-font-family: 'Source Sans Pro', sans-serif !important;
+$heading-font-family: $body-font-family !important;
+$defaultColor: #01FFF7;
+
+// Setup theme colors
+$theme-colors: (
+        'primary': #1DA1F2,
+        'accent': #A0ACBD,
+        'secondary': #3C4856,
+        'success': #00B697,
+        'info': #00C4F7,
+        'warning': #E19E21,
+        'error': #FB6B70,
+        'white': #e7eceb,
+        'tertiary': #717171
+);
+
+$primary: map-get($theme-colors, 'primary');
+$accent: map-get($theme-colors, 'accent');
+$secondary: map-get($theme-colors, 'secondary');
+$success: map-get($theme-colors, 'success');
+$info: map-get($theme-colors, 'info');
+$warning: map-get($theme-colors, 'warning');
+$error: map-get($theme-colors, 'error');
+$white: map-get($theme-colors, 'white');
+$tertiary: map-get($theme-colors, 'tertiary');
+
+:export {
+  @each $key, $value in $theme-colors {
+    #{unquote($key)}: $value;
+  }
+}

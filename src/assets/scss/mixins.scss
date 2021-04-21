@@ -1,0 +1,30 @@
+// =============================================================================
+// Calculate Rem by px
+// =============================================================================
+
+@function calculateRem($size) {
+  $remSize: $size / 16px;
+  @return $remSize * 1rem;
+}
+
+// =============================================================================
+// Font Face
+// =============================================================================
+
+@mixin font-style($color, $fontSize, $fontWeight, $lineHeight){
+  color: $color;
+  font-size: calculateRem($fontSize);
+  font-weight: $fontWeight;
+  line-height: $lineHeight;
+
+}
+
+// =============================================================================
+// Get theme color definition
+// =============================================================================
+@function color($value) {
+  @if map-has-key($theme-colors, $value) {
+    @return map-get($theme-colors, $value);
+  }
+  @return $defaultColor; //if it's not  declared color then return the default color
+}

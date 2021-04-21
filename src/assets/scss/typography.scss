@@ -1,0 +1,27 @@
+// App Title
+.title {
+  @include font-style(color('primary'), 20px, 400, 20px);
+}
+.title-1 {
+  @include font-style(color('tertiary'), 20px, 900, 28.8px);
+}
+// Section Title
+.subheading {
+  @include font-style(color('secondary'), 18px, 700, 18px);
+}
+// Navbar name + lastname
+.subheading-1 {
+  @include font-style(color('secondary'), 18px, 700, 18px);
+  text-transform: capitalize;
+  word-spacing: 0;
+}
+// Navbar username
+.subheading-2 {
+  @include font-style(color('secondary'), 15px, 600, 18px);
+  text-transform: lowercase;
+  word-spacing: 0;
+}
+// Body text
+.body {
+  @include font-style(color('tertiary'), 15px, 300, 24px);
+}
