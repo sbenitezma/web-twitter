@@ -1,4 +1,4 @@
-# new-web-twitter-sonia-benitez
+# web-twitter
 
 > This is an application Based on Vuejs 2.6 Front-end Framework.
 
