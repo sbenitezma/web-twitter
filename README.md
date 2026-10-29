@@ -7,6 +7,10 @@ It started as a small **Vue 2** project and was **migrated to Vue 3** as a
 real-world example of upgrading a legacy front-end. The original Vue 2 code
 is kept in the `v1.0.0-vue2` tag.
 
+**Live demo:** https://sbenitezma-web-twitter.netlify.app/
+
+![Social Chirp home timeline](docs/screenshot.png)
+
 ## Features
 
 - Home timeline with your posts and the posts of the people you follow,
