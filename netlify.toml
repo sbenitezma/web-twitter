@@ -1,0 +1,14 @@
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Single Page Application: every unknown path loads index.html and
+# Vue Router decides what to show (e.g. /user/pauline after a reload)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -1,29 +1,36 @@
-import Vue from "vue";
-import Vuetify from "vuetify";
-import transitions from "vuetify/es5/components/transitions";
-import "vuetify/dist/vuetify.min.css";
-import customTheme from "@/plugins/theme";
-import "material-design-icons-iconfont/dist/material-design-icons.css";
+import "@mdi/font/css/materialdesignicons.css";
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
 
-Vue.use(Vuetify);
+/**
+ * Brand palette. In the Vue 2 version these colors lived in a SCSS map and
+ * were exported to JavaScript with `:export`. Vuetify 3 reads them directly.
+ */
+export const brandColors = {
+  primary: "#5046E5",
+  secondary: "#3C4856",
+  accent: "#A0ACBD",
+  tertiary: "#5F6368",
+  success: "#00B697",
+  info: "#0091B3",
+  warning: "#E19E21",
+  error: "#D93A40",
+  background: "#F1F3F6",
+  surface: "#FFFFFF",
+};
 
-export default new Vuetify({
-  components: {
-    transitions,
-  },
+export default createVuetify({
   theme: {
-    light: true,
-    options: {
-      customProperties: true,
-      iconfont: "md",
-      icons: true,
-      treeShake: true,
-      defaultAssets: {
-        font: {
-          family: "Source Sans Pro",
-        },
+    defaultTheme: "chirpLight",
+    themes: {
+      chirpLight: {
+        dark: false,
+        colors: brandColors,
       },
     },
-    themes: customTheme,
+  },
+  defaults: {
+    VCard: { rounded: "lg" },
+    VBtn: { rounded: "pill" },
   },
 });

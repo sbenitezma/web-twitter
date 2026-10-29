@@ -1,217 +1,130 @@
-# web-twitter
+# Social Chirp
 
-> This is an application Based on Vuejs 2.6 Front-end Framework.
+A small social timeline (Twitter-like) where you can read your timeline,
+publish posts and follow or unfollow people.
 
-## Purpose
+It started as a small **Vue 2** project and was **migrated to Vue 3** as a
+real-world example of upgrading a legacy front-end. The original Vue 2 code
+is kept in the `v1.0.0-vue2` tag.
 
-The goal of this project is to implement a web-based social networking application (similar to Twitter) satisfying the scenarios below:
-- View the current user Timeline
-- View a user's timeline
-- Post a message
-- Follow a new user
-- Unfollow a following user
+## Features
 
-## Main Packages
-* Vue-cli
-* Vuetify
-* Vuex
-* Jest
-* Cypress
-* Sass
-* MDI Icons
-* Momentjs  
-* Eslint
+- Home timeline with your posts and the posts of the people you follow,
+  newest first.
+- Publish posts (max. 280 characters, `Ctrl/Cmd + Enter` to send).
+- Follow and unfollow users. Changes are saved in your browser.
+- User profiles with clean URLs (`/user/pauline`).
+- "Reset demo data" option in the user menu.
+- Responsive layout: on mobile the timeline comes first.
 
+## Tech stack
 
-## Components
+| Area          | Vue 2 version               | Vue 3 version                        |
+| ------------- | --------------------------- | ------------------------------------ |
+| Framework     | Vue 2.6 (Options API)       | Vue 3.5 (`<script setup>`, Composition API) |
+| Build tool    | Vue CLI 4 + webpack 4       | Vite 7                               |
+| State         | Vuex 3                      | Pinia 3                              |
+| Router        | Vue Router 3 (hash mode)    | Vue Router 4 (history mode)          |
+| UI library    | Vuetify 2                   | Vuetify 3                            |
+| Dates         | vue-moment (Moment.js)      | Native `Intl.RelativeTimeFormat`     |
+| Unit tests    | Jest 24 + Vue Test Utils 1  | Vitest + Vue Test Utils 2            |
+| E2E tests     | Cypress 3 (Vue CLI plugin)  | Cypress 14                           |
+| Linting       | ESLint 6 (`.eslintrc`)      | ESLint 9 (flat config) + Prettier 3  |
+| Node          | Not pinned                  | 22                                   |
 
-The components created for this application are the following:
+## Migration notes
 
-- Navbar
-- Post
-- Profile
-- ProgressCircular
-- SocialArea
-- Timeline
-- UserList
+### What changed and why
 
-### Navbar
-Component to display user info on the navbar
-````
-## Data
+- **Vuex → Pinia.** State, mutations, actions and getters now live in one
+  "setup store" (`src/stores/social.js`). The old store kept two copies of
+  the users (`followingUsers` / `nonFollowingUsers`); now only the followed
+  ids are stored and both lists are derived with `computed`, so they can't
+  get out of sync.
+- **Options API → `<script setup>`.** Components are shorter and logic is
+  reusable through composables (`useNow`).
+- **Presentational components.** `UserList` no longer talks to the store, it
+  emits `follow` / `unfollow` events. This makes it reusable and easy to test.
+- **Moment.js removed.** Moment is in maintenance mode and adds weight to the
+  bundle. `src/utils/relativeTime.js` uses the browser's native API instead.
+- **`v-virtual-scroll` removed.** The data set is small, so a plain list is
+  simpler and more accessible.
+- **Hash URLs → clean URLs.** `netlify.toml` adds the SPA redirect so
+  reloading `/user/pauline` works.
+- **Single `SocialArea`.** The old layout rendered it twice and hid one copy
+  per breakpoint; now there is one instance and CSS changes the order.
 
-| Name        | Type    | Description | Initial value                    |
-| ----------- | ------- | ----------- | -------------------------------- |
-| `menuItems` | `array` |             | `[{ title: "Home", path: "/" }]` |
-````
+### Component mapping
 
-### Post
-Component to post a tweet on the user timeline
-````
-## Data
+| Vue 2               | Vue 3                                   |
+| ------------------- | --------------------------------------- |
+| `Navbar`            | `AppNavbar`                             |
+| `Post`              | `PostComposer`                          |
+| `Timeline`          | `UserTimeline` + `PostItem`             |
+| `Profile`           | `UserProfileHeader`                     |
+| `SocialArea`        | `SocialArea`                            |
+| `UserList`          | `UserList`                              |
+| `ProgressCircular`  | Vuetify `v-skeleton-loader`             |
 
-| Name    | Type     | Description | Initial value |
-| ------- | -------- | ----------- | ------------- |
-| `tweet` | `string` |             | `""`          |
+Component names now have two words, following the
+[Vue style guide](https://vuejs.org/style-guide/rules-essential.html#use-multi-word-component-names).
 
-## Methods
+### Bugs fixed during the migration
 
-### postTweet()
-Post new tweet
-````
+- Empty posts could be published.
+- The textarea wasn't cleared after publishing.
+- All changes were lost after reloading the page.
+- Opening an unknown user (`/user/ghost`) broke the page.
+- Author names were rendered with `v-html`, which allowed HTML injection (XSS).
+- A getter sorted the posts array in place, mutating the store state.
+- E2E tests depended on the current date ("a month ago") and broke over time.
 
-### Profile
-Component to display main header of the user profile
-````
-## Props
+## Getting started
 
-| Name              | Type     | Description |
-| ----------------- | -------- | ----------- |
-| `user` *required* | `Object` | &nbsp;      |
-````
+Requirements: Node 22 (see `.nvmrc`).
 
-### ProgressCircular
-Component to display progress circular on different areas according loading section
-````
-## Props
-
-| Name                 | Type      | Description | Default     |
-| -------------------- | --------- | ----------- | ----------- |
-| `v-model` *required* | `Boolean` |             | `false`     |
-| `size`               | `String`  |             | `"50"`      |
-| `color`              | `String`  |             | `"primary"` |
-
-````
-
-###SocialArea
-Component to display the followers and unfollowers section
-
-###Timeline
-Component to display the timeline of a user
-````
-## Props
-
-| Name                | Type     | Description |
-| ------------------- | -------- | ----------- |
-| `height` *required* | `String` |             |
-| `posts` *required*  | `Array`  |             |
-| `user` *required*   | `Object` | &nbsp;      |
-
-## Data
-
-| Name      | Type     | Description | Initial value |
-| --------- | -------- | ----------- | ------------- |
-| `benched` | `number` |             | `0`           |
-
-## Methods
-
-### tellTime()
-````
-###UserList
-Component to display the list of users (unfollowers/followers)
-````
-## Props
-
-| Name               | Type     | Description |
-| ------------------ | -------- | ----------- |
-| `users` *required* | `Array`  |             |
-| `type` *required*  | `String` | &nbsp;      |
-
-## Data
-
-| Name      | Type     | Description | Initial value |
-| --------- | -------- | ----------- | ------------- |
-| `benched` | `number` |             | `0`           |
-
-## Methods
-
-### followUser()
-
-Set follow user
-
-### unfollowUser()
-
-Set unfollower user
-
-````
-
-## Project setup
-```
-yarn install
+```bash
+npm install       # install dependencies
+npm run dev       # start the dev server at http://localhost:5173
 ```
 
-### Compiles and hot-reloads for development
+## Scripts
+
+| Command                 | Description                                  |
+| ----------------------- | -------------------------------------------- |
+| `npm run dev`           | Development server with hot reload           |
+| `npm run build`         | Production build in `dist/`                  |
+| `npm run preview`       | Serve the production build locally           |
+| `npm run test:unit`     | Run unit tests once                          |
+| `npm test`              | Run unit tests in watch mode                 |
+| `npm run test:coverage` | Unit tests with coverage report              |
+| `npm run test:e2e`      | Build, serve and run Cypress E2E tests       |
+| `npm run cypress:open`  | Open the Cypress UI (needs `npm run preview`) |
+| `npm run lint`          | Check code quality with ESLint               |
+| `npm run format`        | Format code with Prettier                    |
+
+## Project structure
+
 ```
-yarn serve
+src/
+├── api/db/user.json      # Mock API data
+├── assets/styles/        # Global styles
+├── components/           # Reusable components
+├── composables/          # Reusable Composition API logic
+├── plugins/vuetify.js    # Vuetify setup and brand colors
+├── router/               # Routes
+├── stores/social.js      # Pinia store
+├── utils/                # Pure helper functions
+└── views/                # One component per route
+tests/unit/               # Vitest unit tests
+cypress/e2e/              # Cypress end-to-end tests
 ```
 
-### Compiles and minifies for production
-```
-yarn build
-```
+## Deployment
 
-### Run your unit tests
-```
-yarn test:unit
-```
+Deployed on Netlify. The build settings live in `netlify.toml`, so no extra
+configuration is needed in the Netlify dashboard.
 
-### Run your end-to-end tests
-```
-yarn test:e2e
-```
+## Author
 
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-
-## Test Coverage
-
-### Unit (Jest)
-````
- PASS  tests/unit/getters.spec.js
- PASS  tests/unit/actions.spec.js
- PASS  tests/unit/Navbar.spec.js
- PASS  tests/unit/Post.spec.js
- PASS  tests/unit/ProgressCircular.spec.js
- PASS  tests/unit/SocialArea.spec.js
- PASS  tests/unit/UserList.spec.js
------------------|----------|----------|----------|----------|-------------------|
-File             |  % Stmts | % Branch |  % Funcs |  % Lines | Uncovered Line #s |
------------------|----------|----------|----------|----------|-------------------|
-All files        |    82.93 |     37.5 |       75 |    82.05 |                   |
- components      |    76.92 |      100 |       50 |    76.92 |                   |
-  Navbar.vue     |      100 |      100 |      100 |      100 |                   |
-  Post.vue       |       75 |      100 |       50 |       75 |                58 |
-  SocialArea.vue |      100 |      100 |      100 |      100 |                   |
-  UserList.vue   |    33.33 |      100 |    33.33 |    33.33 |             91,98 |
- store           |    85.71 |     37.5 |    85.71 |    84.62 |                   |
-  actions.js     |    83.33 |       50 |       75 |    83.33 |             44,45 |
-  getters.js     |     87.5 |    33.33 |       90 |    85.71 |             30,31 |
------------------|----------|----------|----------|----------|-------------------|
-
-Test Suites: 7 passed, 7 total
-Tests:       16 passed, 16 total
-Snapshots:   1 passed, 1 total
-Time:        6.184s, estimated 14s
-Ran all test suites.
-
-````
-
-### E2E (Cypress)
-````
-       Spec                                              Tests  Passing  Failing  Pending  Skipped  
-  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │ √  index.spec.js                            00:05        5        5        -        -        - │
-  ├────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ √  post.spec.js                             00:04        2        2        -        -        - │
-  ├────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ √  user.spec.js                             00:08        9        9        -        -        - │
-  └────────────────────────────────────────────────────────────────────────────────────────────────┘
-    √  All specs passed!                        00:18       16       16        -        -        -  
-
-````
+Made by [Sonia Benítez](https://github.com/sbenitezma).

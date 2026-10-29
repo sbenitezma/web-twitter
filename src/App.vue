@@ -1,65 +1,46 @@
+<script setup>
+import { onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { useSocialStore } from "@/stores/social";
+import AppNavbar from "@/components/AppNavbar.vue";
+import SocialArea from "@/components/SocialArea.vue";
+
+const store = useSocialStore();
+const { loadError } = storeToRefs(store);
+
+onMounted(() => store.loadData());
+</script>
+
 <template>
   <v-app>
-    <v-main class="grey lighten-3">
-      <Navbar />
-      <v-container fluid>
+    <AppNavbar />
+
+    <v-main>
+      <v-container class="py-6" max-width="1200">
+        <v-alert
+          v-if="loadError"
+          type="error"
+          variant="tonal"
+          class="mb-4"
+          title="We couldn't load the timeline"
+          text="Please refresh the page to try again."
+        />
+
         <v-row>
-          <v-col
-            cols="12"
-            md="4"
-            lg="4"
-            sm="12"
-            xs="12"
-            class="hidden-sm-and-down"
-          >
+          <!--
+            Vue 2 rendered <SocialArea> twice and hid one copy per breakpoint.
+            Now there is a single instance and the order changes on mobile.
+          -->
+          <v-col cols="12" md="4" class="order-2 order-md-1">
             <SocialArea />
           </v-col>
-          <v-col cols="12" md="8" lg="8" sm="12" xs="12">
-            <router-view :key="$route.path"></router-view>
-          </v-col>
-          <v-col
-            cols="12"
-            md="4"
-            lg="4"
-            sm="12"
-            xs="12"
-            class="hidden-md-and-up"
-          >
-            <SocialArea />
+          <v-col cols="12" md="8" class="order-1 order-md-2">
+            <RouterView v-slot="{ Component, route }">
+              <component :is="Component" :key="route.path" />
+            </RouterView>
           </v-col>
         </v-row>
       </v-container>
     </v-main>
   </v-app>
 </template>
-
-<script>
-import { mapState } from "vuex";
-
-import Navbar from "@/components/Navbar";
-import SocialArea from "@/components/SocialArea";
-
-export default {
-  name: "App",
-  components: {
-    SocialArea,
-    Navbar,
-  },
-  mounted() {
-    // fetch the data when the view is created and the data is
-    // already being observed
-    this.fetchUser();
-  },
-  data: () => ({
-    tab: null,
-  }),
-  computed: {
-    ...mapState(["loading"]),
-  },
-  methods: {
-    async fetchUser() {
-      await this.$store.dispatch("LOAD_USER");
-    },
-  },
-};
-</script>
