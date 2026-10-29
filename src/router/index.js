@@ -1,25 +1,30 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "@/views/Home";
-import User from "@/views/User";
+import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "@/views/HomeView.vue";
 
-Vue.use(VueRouter);
-
-const routes = [
+export const routes = [
   {
     path: "/",
     name: "Home",
-    component: Home,
+    component: HomeView,
   },
   {
     path: "/user/:username",
     name: "User",
-    component: User,
+    // Lazy loaded: only downloaded when a profile is opened
+    component: () => import("@/views/UserView.vue"),
+    props: true,
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: () => import("@/views/NotFoundView.vue"),
   },
 ];
 
-const router = new VueRouter({
+export default createRouter({
+  // Clean URLs (/user/pauline instead of /#/user/pauline).
+  // Netlify needs the SPA redirect declared in netlify.toml for this.
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  scrollBehavior: () => ({ top: 0 }),
 });
-
-export default router;
