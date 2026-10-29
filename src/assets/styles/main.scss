@@ -20,6 +20,11 @@ body,
   color: rgb(var(--v-theme-tertiary));
 }
 
+// Vuetify fades subtitles to 70%, which drops the brand grey below WCAG AA
+.v-list-item-subtitle.chirp-username {
+  opacity: 1;
+}
+
 .chirp-content {
   color: rgb(var(--v-theme-on-surface));
   white-space: pre-wrap;
