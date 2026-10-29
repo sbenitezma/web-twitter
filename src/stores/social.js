@@ -1,4 +1,4 @@
-import { computed, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { defineStore } from "pinia";
 import {
   loadFromStorage,
@@ -53,6 +53,8 @@ export const useSocialStore = defineStore("social", () => {
   const ownPosts = ref([]);
   const isLoading = ref(true);
   const loadError = ref(null);
+  // Read aloud by screen readers through the aria-live region in App.vue
+  const announcement = ref("");
 
   // --- Getters -------------------------------------------------------------
   const followingUsers = computed(() =>
@@ -100,6 +102,17 @@ export const useSocialStore = defineStore("social", () => {
   }
 
   // --- Actions -------------------------------------------------------------
+  function announce(message) {
+    // Clear first so the same message is announced again if it repeats
+    announcement.value = "";
+    nextTick(() => {
+      announcement.value = message;
+    });
+  }
+
+  const usernameOf = (userId) =>
+    users.value.find((user) => user._idUser === userId)?.username;
+
   async function loadData() {
     isLoading.value = true;
     loadError.value = null;
@@ -132,12 +145,14 @@ export const useSocialStore = defineStore("social", () => {
     if (exists && !isFollowing(userId)) {
       followingIds.value = [...followingIds.value, userId];
       saveToStorage(STORAGE_KEYS.following, followingIds.value);
+      announce(`You are now following @${usernameOf(userId)}`);
     }
   }
 
   function unfollow(userId) {
     followingIds.value = followingIds.value.filter((id) => id !== userId);
     saveToStorage(STORAGE_KEYS.following, followingIds.value);
+    announce(`You unfollowed @${usernameOf(userId)}`);
   }
 
   /**
@@ -159,6 +174,7 @@ export const useSocialStore = defineStore("social", () => {
     };
     ownPosts.value = [...ownPosts.value, post];
     saveToStorage(STORAGE_KEYS.ownPosts, ownPosts.value);
+    announce("Your post was published");
     return post;
   }
 
@@ -166,6 +182,7 @@ export const useSocialStore = defineStore("social", () => {
   async function resetDemo() {
     Object.values(STORAGE_KEYS).forEach(removeFromStorage);
     await loadData();
+    announce("Demo data restored");
   }
 
   return {
@@ -175,6 +192,7 @@ export const useSocialStore = defineStore("social", () => {
     ownPosts,
     isLoading,
     loadError,
+    announcement,
     followingUsers,
     suggestedUsers,
     currentUserPosts,

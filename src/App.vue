@@ -6,7 +6,7 @@ import AppNavbar from "@/components/AppNavbar.vue";
 import SocialArea from "@/components/SocialArea.vue";
 
 const store = useSocialStore();
-const { loadError } = storeToRefs(store);
+const { loadError, announcement } = storeToRefs(store);
 
 onMounted(() => store.loadData());
 </script>
@@ -14,6 +14,11 @@ onMounted(() => store.loadData());
 <template>
   <v-app>
     <AppNavbar />
+
+    <!-- Invisible, but screen readers read every change out loud -->
+    <div class="d-sr-only" role="status" aria-live="polite">
+      {{ announcement }}
+    </div>
 
     <v-main>
       <v-container class="py-6" max-width="1200">

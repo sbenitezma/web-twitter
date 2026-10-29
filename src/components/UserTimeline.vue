@@ -37,14 +37,18 @@ const now = useNow();
       :posts-count="postsCount ?? user.posts.length"
     />
 
-    <v-card-title class="text-primary pt-4">{{ title }}</v-card-title>
+    <v-card-title tag="h2" class="text-primary pt-4">{{ title }}</v-card-title>
     <v-divider />
 
+    <!-- No <v-divider> inside the list: a list may only contain list items -->
     <v-list v-if="posts.length" lines="three" class="py-0">
-      <template v-for="(post, index) in posts" :key="post._idPost">
-        <v-divider v-if="index > 0" />
-        <PostItem :post="post" :now="now" />
-      </template>
+      <PostItem
+        v-for="post in posts"
+        :key="post._idPost"
+        :post="post"
+        :now="now"
+        class="chirp-post"
+      />
     </v-list>
 
     <v-card-text

@@ -27,11 +27,11 @@ function publish() {
 
 <template>
   <v-card data-test="post-composer">
-    <v-card-title class="text-primary">New post</v-card-title>
+    <v-card-title tag="h2" class="text-primary">New post</v-card-title>
 
     <v-card-text class="d-flex ga-3 pb-0">
       <v-avatar v-if="currentUser" size="48">
-        <v-img :src="currentUser.picture" :alt="currentUser.username" />
+        <v-img :src="currentUser.picture" alt="" />
       </v-avatar>
 
       <!-- Ctrl/Cmd + Enter publishes, like most social apps -->
