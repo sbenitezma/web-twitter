@@ -12,11 +12,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview --port 4173",
+    "preview": "vite preview --host 127.0.0.1 --port 4173",
     "test": "vitest",
     "test:unit": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "start-server-and-test preview http://localhost:4173 cypress:run",
+    "test:e2e": "npm run build && start-server-and-test \"vite preview --host 127.0.0.1 --port 4173\" http://127.0.0.1:4173 \"cypress run\"",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "lint": "eslint .",
@@ -44,7 +44,7 @@
     "jsdom": "^26.1.0",
     "prettier": "^3.6.2",
     "sass-embedded": "^1.89.2",
-    "start-server-and-test": "^2.0.12",
+    "start-server-and-test": "^3.0.13",
     "vite": "^7.0.0",
     "vite-plugin-vuetify": "^2.1.1",
     "vitest": "^3.2.4"
