@@ -8,5 +8,14 @@ export default defineConfig({
     viewportWidth: 1440,
     viewportHeight: 900,
     video: false,
+    setupNodeEvents(on) {
+      // Prints axe violations in the terminal (and in CI logs)
+      on("task", {
+        log(message) {
+          console.log(message);
+          return null;
+        },
+      });
+    },
   },
 });
