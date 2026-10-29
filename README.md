@@ -3,9 +3,9 @@
 A small social timeline (Twitter-like) where you can read your timeline,
 publish posts and follow or unfollow people.
 
-It started in 2021 as a **technical test built with Vue 2** and was
-**migrated to Vue 3 in 2026** as a real-world example of upgrading a legacy
-front-end. The original code is kept in the `v1.0.0-vue2` tag.
+It started as a small **Vue 2** project and was **migrated to Vue 3** as a
+real-world example of upgrading a legacy front-end. The original Vue 2 code
+is kept in the `v1.0.0-vue2` tag.
 
 ## Features
 
@@ -19,7 +19,7 @@ front-end. The original code is kept in the `v1.0.0-vue2` tag.
 
 ## Tech stack
 
-| Area          | Vue 2 version (2021)        | Vue 3 version (2026)                 |
+| Area          | Vue 2 version               | Vue 3 version                        |
 | ------------- | --------------------------- | ------------------------------------ |
 | Framework     | Vue 2.6 (Options API)       | Vue 3.5 (`<script setup>`, Composition API) |
 | Build tool    | Vue CLI 4 + webpack 4       | Vite 7                               |
