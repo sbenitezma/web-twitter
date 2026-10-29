@@ -36,7 +36,7 @@ const emit = defineEmits(["follow", "unfollow"]);
           aria-hidden="true"
         >
           <v-avatar size="40">
-            <v-img :src="user.picture" :alt="user.username" />
+            <v-img :src="user.picture" alt="" />
           </v-avatar>
         </RouterLink>
       </template>

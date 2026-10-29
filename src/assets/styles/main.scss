@@ -26,6 +26,16 @@ body,
   overflow-wrap: anywhere;
 }
 
+// Vuetify's resting field label is 4.3:1 on white; WCAG AA asks for 4.5:1
+.v-field-label:not(.v-field-label--floating) {
+  opacity: 0.75;
+}
+
+// Separator between posts, drawn with CSS so the list only has list items
+.chirp-post + .chirp-post {
+  border-top: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
 // Scrollable lists replace the Vue 2 <v-virtual-scroll>: the data set is
 // small, so plain scrolling is simpler and more accessible.
 .chirp-scroll {

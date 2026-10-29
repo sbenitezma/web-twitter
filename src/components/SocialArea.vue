@@ -10,7 +10,7 @@ const { followingUsers, suggestedUsers, isLoading } = storeToRefs(store);
 <template>
   <div class="d-flex flex-column ga-4">
     <v-card data-test="following-users">
-      <v-card-title class="text-primary">
+      <v-card-title tag="h2" class="text-primary">
         Following
         <span class="text-medium-emphasis" data-test="following-count">
           · {{ followingUsers.length }}
@@ -27,7 +27,7 @@ const { followingUsers, suggestedUsers, isLoading } = storeToRefs(store);
     </v-card>
 
     <v-card data-test="suggested-users">
-      <v-card-title class="text-primary">Who to follow</v-card-title>
+      <v-card-title tag="h2" class="text-primary">Who to follow</v-card-title>
       <v-skeleton-loader v-if="isLoading" type="list-item-avatar@4" />
       <UserList
         v-else

@@ -22,14 +22,14 @@ const exactDate = computed(() => new Date(props.post.date).toLocaleString());
     Security fix: the Vue 2 version rendered the author with v-html, which
     allows HTML injection. Text interpolation escapes it automatically.
   -->
-  <v-list-item tag="article" class="py-3" data-test="post-item">
+  <v-list-item class="py-3" data-test="post-item">
     <template #prepend>
       <RouterLink
         :to="{ name: 'User', params: { username: post.author } }"
         :aria-label="`Open ${post.authorName}'s profile`"
       >
         <v-avatar size="44">
-          <v-img :src="post.picture" :alt="post.author" />
+          <v-img :src="post.picture" alt="" />
         </v-avatar>
       </RouterLink>
     </template>

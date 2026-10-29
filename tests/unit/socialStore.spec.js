@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { nextTick } from "vue";
 import { createPinia, setActivePinia } from "pinia";
 import {
   MAX_POST_LENGTH,
@@ -128,6 +129,17 @@ describe("social store", () => {
       expect(
         JSON.parse(window.localStorage.getItem(STORAGE_KEYS.following)),
       ).toEqual(["u-pauline", "u-sexton"]);
+    });
+
+    it("announces the change to screen readers", async () => {
+      const { store } = await createLoadedStore();
+      store.follow("u-sexton");
+      await nextTick();
+      expect(store.announcement).toBe("You are now following @sexton");
+
+      store.unfollow("u-sexton");
+      await nextTick();
+      expect(store.announcement).toBe("You unfollowed @sexton");
     });
   });
 
