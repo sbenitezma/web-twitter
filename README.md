@@ -1,5 +1,7 @@
 # Social Chirp
 
+[![CI](https://github.com/sbenitezma/social-chirp/actions/workflows/ci.yml/badge.svg)](https://github.com/sbenitezma/social-chirp/actions/workflows/ci.yml)
+
 A small social timeline (Twitter-like) where you can read your timeline,
 publish posts and follow or unfollow people.
 
@@ -7,7 +9,7 @@ It started as a small **Vue 2** project and was **migrated to Vue 3** as a
 real-world example of upgrading a legacy front-end. The original Vue 2 code
 is kept in the `v1.0.0-vue2` tag.
 
-**Live demo:** https://sbenitezma-web-twitter.netlify.app/
+**Live demo:** https://sbenitezma-social-chirp.netlify.app/
 
 ![Social Chirp home timeline](docs/screenshot.png)
 
